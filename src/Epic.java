@@ -1,30 +1,31 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Epic extends Task{
-    private ArrayList<Integer> subTaskID;
+    private ArrayList<Subtask> subtaskList;
 
     public Epic(String name, String description) {
         super(name, description);
-        subTaskID = new ArrayList<>();
+        subtaskList = new ArrayList<>();
     }
 
-    public ArrayList<Integer> getSubTaskID() {
-        return subTaskID;
+    public ArrayList<Subtask> getSubtaskList() {
+        return subtaskList;
     }
 
-    public void addSubTaskID(int subID) {
-        subTaskID.add(subID);
+    public void setSubtaskList(ArrayList<Subtask> subTasksOfEpic) {
+        this.subtaskList = subTasksOfEpic;
     }
 
+    public void addSubtask(Subtask newSubtask) {
+        subtaskList.add(newSubtask);
+    }
 
-    public void checkStatus(HashMap<Integer, Subtask> subtasks) {
-        status = "DONE";
-        if (subTaskID.isEmpty()) {
+    public void checkStatus() {
+        if (subtaskList.isEmpty()) {
             status = "NEW";
-        } else {
-            for (Integer subtaskID : subTaskID) {
-                String compare = subtasks.get(subtaskID).getStatus();
+        } else if (subtaskList.size() != 1) {
+            for (Subtask subtask : subtaskList) {
+                String compare = subtask.getStatus();
                 if ((compare.equals("NEW")) && status.equals("NEW")) {
                     status = "NEW";
                 } else if (compare.equals("DONE") && status.equals("DONE")) {
@@ -34,6 +35,8 @@ public class Epic extends Task{
                     break;
                 }
             }
+        } else {
+            status = subtaskList.get(0).getStatus();
         }
     }
 
@@ -49,6 +52,6 @@ public class Epic extends Task{
             result = result + ", description=null";
         }
 
-        return result + ", status=" + status + '\'' + ", subTaskID=" + subTaskID + '}';
+        return result + ", status=" + status + '\'' + ", subtaskList=" + subtaskList + '}';
     }
 }

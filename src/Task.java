@@ -2,13 +2,21 @@ public class Task {
     protected String name;
     protected String description;
     protected int ID;
-    protected String status = "NEW";
+    protected String status;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.status = "NEW";
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getStatus() {
         return status;
