@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ListIterator;
+import java.util.*;
 
 public class Manager {
     private int IDNumber = 0;
@@ -8,15 +6,15 @@ public class Manager {
     HashMap <Integer, Epic> epics = new HashMap<>();
     HashMap <Integer, Subtask> subtasks = new HashMap<>();
 
-    public Object getAllTask() {
+    public Collection<Task> getAllTask() {
         return tasks.values();
     }
 
-    public Object getAllEpics() {
+    public Collection<Epic> getAllEpics() {
         return epics.values();
     }
 
-    public Object getAllSubtasks() {
+    public Collection<Subtask> getAllSubtasks() {
         return subtasks.values();
     }
 
