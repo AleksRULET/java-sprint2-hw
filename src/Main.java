@@ -1,64 +1,84 @@
 public class Main {
     public static void main(String[] args) {
-        Manager manager =new Manager();
-
+        TaskManager taskManager = Managers.getDefault();
+      //Тест функционала второго спринта//
         Task study = new Task("Учёба", "Описание");
-        manager.createTask(study);
+        taskManager.createTask(study);
 
         Task workout = new Task("Тренировка", "Описание");
-        manager.createTask(workout);
+        taskManager.createTask(workout);
 
         Epic relocation = new Epic("Переезд", "Описание");
-        manager.createEpic(relocation);
+        taskManager.createEpic(relocation);
 
         Subtask getAVisa = new Subtask("Получить  визу", "Описание", relocation);
-        manager.createSubtask(getAVisa);
+        taskManager.createSubtask(getAVisa);
 
         Subtask accumulateFunds = new Subtask("Накопить деньги", "Описание",  relocation);
-        manager.createSubtask(accumulateFunds);
+        taskManager.createSubtask(accumulateFunds);
 
         Epic survival = new Epic("Выживание", "Описание");
-        manager.createEpic(survival);
+        taskManager.createEpic(survival);
 
         Subtask buyBuckwheat = new Subtask("Купить гречку", "Описание", survival);
-        manager.createSubtask(buyBuckwheat);
+        taskManager.createSubtask(buyBuckwheat);
 
-        System.out.println(manager.getAllTask());
-        System.out.println(manager.getAllEpics());
-        System.out.println(manager.getAllSubtasks());
-        System.out.println(manager.getSubtasksOfEpic(2));
+        System.out.println(taskManager.getAllTask());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
 
         Task newStudy = new Task("Учёба", "Спринт 2");
-        manager.updateTask(study.getID(), newStudy, "IN_PROGRESS");
+        taskManager.updateTask(study.getID(), newStudy, "IN_PROGRESS");
 
         Task newWorkout = new Task("Тренировка", "Силовые упражнения");
-        manager.updateTask(workout.getID(), newWorkout, "DONE");
+        taskManager.updateTask(workout.getID(), newWorkout, "DONE");
 
         Epic newRelocation = new Epic("Переезд", "За границу");
-        manager.updateEpic(relocation.getID(), newRelocation);
+        taskManager.updateEpic(relocation.getID(), newRelocation);
 
         Subtask newGetAVisa = new Subtask("Получить  визу", "Подготовить документы, прийти в посольство", newRelocation);
-        manager.updateSubtask(getAVisa.getID(), newGetAVisa, "NEW");
+        taskManager.updateSubtask(getAVisa.getID(), newGetAVisa, "NEW");
 
         Subtask newAccumulateFunds = new Subtask("Накопить деньги", "Окладывать с зарплаты", newRelocation);
-        manager.updateSubtask(accumulateFunds.getID(), newAccumulateFunds, "IN_PROGRESS");
+        taskManager.updateSubtask(accumulateFunds.getID(), newAccumulateFunds, "IN_PROGRESS");
 
         Epic newSurvival = new Epic("Выживание", "Прожить нелёгких условиях");
-        manager.updateEpic(survival.getID(), newSurvival);
+        taskManager.updateEpic(survival.getID(), newSurvival);
 
         Subtask newBuyBuckwheat = new Subtask("Купить гречку", "Найти, в каком магазине осталась гречка", newSurvival);
-        manager.updateSubtask(buyBuckwheat.getID(), newBuyBuckwheat, "DONE");
+        taskManager.updateSubtask(buyBuckwheat.getID(), newBuyBuckwheat, "DONE");
 
-        System.out.println("\n"+manager.getAllTask());
-        System.out.println(manager.getAllEpics());
-        System.out.println(manager.getAllSubtasks());
+        System.out.println("\n"+taskManager.getAllTask());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
 
-        manager.deleteTaskByID(1);
-        manager.deleteEpicByID(5);
+        taskManager.deleteTaskByID(1);
+        taskManager.deleteEpicByID(5);
 
-        System.out.println("\n"+manager.getAllTask());
-        System.out.println(manager.getAllEpics());
-        System.out.println(manager.getAllSubtasks());
+        System.out.println("\n"+taskManager.getAllTask());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
 
+        //Тест функционала третьего спринта//
+        taskManager.getTaskByID(0);
+        taskManager.getSubtaskByID(4);
+        taskManager.getSubtaskByID(3);
+        taskManager.getSubtaskByID(4);
+        taskManager.getEpicByID(2);
+      //Вызвали 5 задач по ID//
+        System.out.println("\n" + "\n" + taskManager.history());
+
+        taskManager.getEpicByID(2);
+        taskManager.getSubtaskByID(4);
+        taskManager.getTaskByID(0);
+        taskManager.getTaskByID(0);
+        taskManager.getSubtaskByID(3);
+      //Вызвали 10 задач по ID//
+        System.out.println("\n" + taskManager.history());
+
+        taskManager.getTaskByID(0);
+        taskManager.getSubtaskByID(3);
+      //Вызвали ещё и проверили что отображаеться только 10 результатов в истории//
+        System.out.println("\n" + taskManager.history());
     }
 }

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private ArrayList<Subtask> subtaskList;
 
     public Epic(String name, String description) {
@@ -22,16 +22,16 @@ public class Epic extends Task{
 
     public void checkStatus() {
         if (subtaskList.isEmpty()) {
-            status = "NEW";
+            status = Status.NEW;
         } else if (subtaskList.size() != 1) {
             for (Subtask subtask : subtaskList) {
-                String compare = subtask.getStatus();
-                if ((compare.equals("NEW")) && status.equals("NEW")) {
-                    status = "NEW";
-                } else if (compare.equals("DONE") && status.equals("DONE")) {
-                    status = "DONE";
+                Status compare = subtask.getStatus();
+                if ((compare.equals(Status.NEW)) && status.equals(Status.NEW)) {
+                    status = Status.NEW;
+                } else if (compare.equals(Status.DONE) && status.equals(Status.DONE)) {
+                    status = Status.DONE;
                 } else {
-                    status = "IN_PROGRESS";
+                    status = Status.IN_PROGRESS;
                     break;
                 }
             }
