@@ -21,8 +21,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void linkLast(Task task) {
         if (task != null) {
-
-
             customNode newHead = new customNode(task);
             if (head != null) {
                 customNode oldHead = head;
@@ -38,6 +36,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             place.put(newHead.getTask().getID(), newHead);
         }
     }
+
 /*
     if (task != null) {
         if (place.containsKey(task.getID())) {
