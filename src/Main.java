@@ -7,7 +7,8 @@ import util.Managers;
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
-      //Тест функционала второго спринта//
+      /*
+        //Тест функционала второго спринта//
         Task study = new Task("Учёба", "Описание");
         taskManager.createTask(study);
 
@@ -85,6 +86,52 @@ public class Main {
         taskManager.getTaskByID(0);
         taskManager.getSubtaskByID(3);
       //Вызвали ещё и проверили что отображаеться только 10 результатов в истории//
+        System.out.println("\n" + taskManager.history());
+       */
+
+        //Тест функционала четвёртого спринта
+        Task study = new Task("Учёба", "Описание");
+        taskManager.createTask(study);
+
+        Task workout = new Task("Тренировка", "Описание");
+        taskManager.createTask(workout);
+
+        Epic relocation = new Epic("Переезд", "Описание");
+        taskManager.createEpic(relocation);
+
+        Subtask getAVisa = new Subtask("Получить  визу", "Описание", relocation);
+        taskManager.createSubtask(getAVisa);
+
+        Subtask accumulateFunds = new Subtask("Накопить деньги", "Описание",  relocation);
+        taskManager.createSubtask(accumulateFunds);
+
+        Subtask prepareDocuments = new Subtask("Подготовить документы", "Описание",  relocation);
+        taskManager.createSubtask(accumulateFunds);
+
+        Epic survival = new Epic("Выживание", "Описание");
+        taskManager.createEpic(survival);
+
+        taskManager.getTaskByID(0);
+        taskManager.getSubtaskByID(4);
+        taskManager.getSubtaskByID(3);
+        taskManager.getSubtaskByID(6);
+        taskManager.getSubtaskByID(5);
+        taskManager.getEpicByID(7);
+        taskManager.getTaskByID(1);
+        taskManager.getEpicByID(7);
+        taskManager.getEpicByID(7);
+        taskManager.getSubtaskByID(6);
+        taskManager.getEpicByID(2);
+        taskManager.getTaskByID(0);
+        //Вызвали 7 задач по ID//
+        System.out.println("\n" + "\n" + taskManager.history());
+
+        taskManager.deleteTaskByID(0);
+        //Удалили задачу//
+        System.out.println("\n" + "\n" + taskManager.history());
+
+        taskManager.deleteEpicByID(2);
+        //Удалили эпик с тремя подзадачами//
         System.out.println("\n" + taskManager.history());
     }
 }
