@@ -5,12 +5,10 @@ import tasks.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    Map<Integer, Node> place = new HashMap<>();
-    private Node head = null;
-    private Node tail= null;
+    Map<Integer, customNode> place = new HashMap<>();
+    private customNode head = null;
+    private customNode tail= null;
 
-    public InMemoryHistoryManager() {
-    }
 
     public List<Task> getHistory() {
         return getTasks();
@@ -23,9 +21,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void linkLast(Task task) {
         if (task != null) {
-            Node newHead = new Node(task);
+
+
+            customNode newHead = new customNode(task);
             if (head != null) {
-                Node oldHead = head;
+                customNode oldHead = head;
                 oldHead.setPrev(newHead);
                 place.put(oldHead.getTask().getID(), oldHead);
                 newHead.setNext(oldHead);
@@ -54,9 +54,9 @@ public class InMemoryHistoryManager implements HistoryManager {
    */
     public void removeNode (int id) {
         if (place.get(id) != null) {
-            Node nodeToDelete = place.get(id);
-            Node prev = nodeToDelete.getPrev();
-            Node next = nodeToDelete.getNext();
+            customNode nodeToDelete = place.get(id);
+            customNode prev = nodeToDelete.getPrev();
+            customNode next = nodeToDelete.getNext();
 
             if (prev != null) {
                 prev.setNext(next);
@@ -82,49 +82,62 @@ public class InMemoryHistoryManager implements HistoryManager {
     private List getTasks() {
         List <Task> historyList = new ArrayList<>();
         if (head != null) {
-            Node first = head;
+            customNode first = head;
             while (first != null) {
                 historyList.add(first.getTask());
-                first = first.getPrev();
+                first = first.getNext();
             }
         }
         return historyList;
     }
 
-    class Node {
+    class customNode {
         private Task task;
-        private Node next;
-        private Node prev;
+        private customNode next;
+        private customNode prev;
 
-        public Node(Task task) {
+        public customNode(Task task) {
             this.task = task;
             this.next = null;
             this.prev = null;
         }
 
-        public Node(Task task, Node next, Node prev) {
+        public customNode(Task task, customNode next, customNode prev) {
             this.task = task;
             this.next = next;
             this.prev = prev;
+        }
+
+        public boolean equals(customNode node) {
+            return task.equals(node.task)
+                    && next.equals(node.next)
+                    && prev.equals(node.prev);
+        }
+
+        public int hashCode() {
+            int result = task.hashCode();
+            result = 31 * result + next.hashCode();
+            result = 31 * result + prev.hashCode();
+            return result;
         }
 
         public Task getTask() {
             return task;
         }
 
-        public Node getNext() {
+        public customNode getNext() {
             return next;
         }
 
-        public void setNext(Node next) {
+        public void setNext(customNode next) {
             this.next = next;
         }
 
-        public Node getPrev() {
+        public customNode getPrev() {
             return prev;
         }
 
-        public void setPrev(Node prev) {
+        public void setPrev(customNode prev) {
             this.prev = prev;
         }
     }
