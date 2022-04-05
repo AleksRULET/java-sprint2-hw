@@ -21,13 +21,13 @@ public class Subtask extends Task {
         String result = "Subtask{" +
                 "name='" + name + '\'' +
                 ", ID='" + ID + '\'';
-
+/*
         if(description != null) {
             result = result + ", description.length=" + description.length();
         } else {
             result = result + ", description=null";
         }
-
+*/
         return result + ", status=" + status + '\'' + ", epicID=" + epicID + '}';
     }
 }

@@ -89,7 +89,7 @@ public class Main {
         System.out.println("\n" + taskManager.history());
        */
 
-        //Тест функционала четвёртого спринта
+        //Тест функционала четвёртого спринта!!!
         Task study = new Task("Учёба", "Описание");
         taskManager.createTask(study);
 
@@ -106,29 +106,31 @@ public class Main {
         taskManager.createSubtask(accumulateFunds);
 
         Subtask prepareDocuments = new Subtask("Подготовить документы", "Описание",  relocation);
-        taskManager.createSubtask(accumulateFunds);
+        taskManager.createSubtask(prepareDocuments);
 
         Epic survival = new Epic("Выживание", "Описание");
         taskManager.createEpic(survival);
+        //Создали 7 задач//
 
         taskManager.getTaskByID(0);
-        taskManager.getSubtaskByID(4);
-        taskManager.getSubtaskByID(3);
-        taskManager.getSubtaskByID(6);
-        taskManager.getSubtaskByID(5);
-        taskManager.getEpicByID(7);
         taskManager.getTaskByID(1);
-        taskManager.getEpicByID(7);
-        taskManager.getEpicByID(7);
-        taskManager.getSubtaskByID(6);
         taskManager.getEpicByID(2);
-        taskManager.getTaskByID(0);
+        taskManager.getSubtaskByID(3);
+        taskManager.getSubtaskByID(4);
+        taskManager.getSubtaskByID(5);
+        taskManager.getEpicByID(6);
         //Вызвали 7 задач по ID//
-        System.out.println("\n" + "\n" + taskManager.history());
+        System.out.println("\n" + taskManager.history());
+
+        taskManager.getTaskByID(0);
+        taskManager.getEpicByID(2);
+        taskManager.getSubtaskByID(5);
+        //Вызвали задачи повторно//
+        System.out.println("\n" + taskManager.history());
 
         taskManager.deleteTaskByID(0);
         //Удалили задачу//
-        System.out.println("\n" + "\n" + taskManager.history());
+        System.out.println("\n" + taskManager.history());
 
         taskManager.deleteEpicByID(2);
         //Удалили эпик с тремя подзадачами//
