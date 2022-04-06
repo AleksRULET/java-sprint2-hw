@@ -30,32 +30,27 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (places.containsKey(task.getID())) {
                 remove(task.getID());
             }
-            Node newHead = new Node(task);
-            if (head != null) {
-                Node oldHead = head;
-                oldHead.setPrev(newHead);
-                places.put(oldHead.getTask().getID(), oldHead);
-                newHead.setNext(oldHead);
-                tail = oldHead;
+            Node prevTail = tail;
+            Node lastNode = new Node(task, null, tail);
+            if (prevTail != null) {
+                prevTail.setNext(lastNode);
+            } else {
+                head = lastNode;
             }
-            if (tail == null) {
-                tail = newHead;
-            }
-            head = newHead;
-            places.put(newHead.getTask().getID(), newHead);
+            tail = lastNode;
+            places.put(task.getID(), lastNode);
         }
     }
 
     @Override
     public void remove(int id) {
-        removeNode(id);
+        removeNode(places.get(id));
     }
 
-    private void removeNode (int id) {
-        if (places.get(id) != null) {
-            Node nodeToDelete = places.get(id);
-            Node prev = nodeToDelete.getPrev();
-            Node next = nodeToDelete.getNext();
+    private void removeNode (Node node) {
+        if (node != null) {
+            Node prev = node.getPrev();
+            Node next = node.getNext();
             if (prev != null) {
                 prev.setNext(next);
             } else {
@@ -68,7 +63,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tail = prev;
                 tail.setNext(null);
             }
-            places.remove(id);
+            places.remove(node);
         }
     }
 
@@ -88,12 +83,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         private final Task task;
         private Node next;
         private Node prev;
-
-        public Node(Task task) {
-            this.task = task;
-            this.next = null;
-            this.prev = null;
-        }
 
         public Node(Task task, Node next, Node prev) {
             this.task = task;
