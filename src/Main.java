@@ -6,7 +6,7 @@ import util.Managers;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+        //TaskManager taskManager = Managers.getDefault();
       /*
         //Тест функционала второго спринта//
         Task study = new Task("Учёба", "Описание");
@@ -87,7 +87,7 @@ public class Main {
         taskManager.getSubtaskByID(3);
       //Вызвали ещё и проверили что отображаеться только 10 результатов в истории//
         System.out.println("\n" + taskManager.history());
-       */
+
 
         //Тест функционала четвёртого спринта!!!
         Task study = new Task("Учёба", "Описание");
@@ -135,5 +135,6 @@ public class Main {
         taskManager.deleteEpicByID(2);
         //Удалили эпик с тремя подзадачами//
         System.out.println("\n" + taskManager.history());
+        */
     }
 }

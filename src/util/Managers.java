@@ -1,14 +1,13 @@
 package util;
 
-import managers.HistoryManager;
-import managers.InMemoryHistoryManager;
-import managers.InMemoryTaskManager;
-import managers.TaskManager;
+import managers.*;
+
+import java.io.IOException;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager(getDefaultHistory());
+    public static FileBackedTasksManager getDefault() throws IOException {
+        return new FileBackedTasksManager(getDefaultHistory());
     }
 
     public static HistoryManager getDefaultHistory() {

@@ -10,6 +10,11 @@ public class Epic extends Task {
         subtaskList = new ArrayList<>();
     }
 
+    public Epic(int ID, String description, String name, Status status) {
+        super(ID, description, name, status);
+        subtaskList = new ArrayList<>();
+    }
+
     public ArrayList<Subtask> getSubtaskList() {
         return subtaskList;
     }
@@ -40,6 +45,10 @@ public class Epic extends Task {
         } else {
             status = subtaskList.get(0).getStatus();
         }
+    }
+
+    @Override
+    public void setStatus(String status) {
     }
 
     @Override

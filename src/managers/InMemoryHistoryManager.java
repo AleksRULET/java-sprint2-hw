@@ -17,7 +17,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        return getTasks();
+            return getTasks();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    private List getTasks() {
+    private List<Task> getTasks() {
         List <Task> historyList = new ArrayList<>();
         if (head != null) {
             Node first = head;
@@ -77,6 +77,27 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
         }
         return historyList;
+    }
+
+    public String toString() {
+        String result = "";
+        for (Task t: getHistory()) {
+            result = result + t.getID() + ",";
+        }
+        return result;
+    }
+
+    public List<Integer> fromString(String value) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (value != null) {
+            Scanner scanner = new Scanner(value);
+            scanner.useDelimiter(",");
+            while (scanner.hasNext()) {
+                String data = scanner.next();
+                list.add(Integer.parseInt(data));
+            }
+            return list;
+        } return null;
     }
 
     class Node {
