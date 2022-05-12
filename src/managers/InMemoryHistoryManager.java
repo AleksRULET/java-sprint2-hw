@@ -84,6 +84,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         for (Task t: getHistory()) {
             result = result + t.getID() + ",";
         }
+        StringBuilder sb = new StringBuilder(result);
+        if (result.length() != 0) {
+            result = sb.deleteCharAt(sb.length() - 1).toString();
+        }
         return result;
     }
 

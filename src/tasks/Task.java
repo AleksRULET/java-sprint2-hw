@@ -47,6 +47,11 @@ public class Task {
         return description;
     }
 
+    public String tasksToString() {
+        return getID() + "," + getClass().getSimpleName().toUpperCase() + "," + getName() + "," + getStatus() + ","
+                + getDescription();
+    }
+
     @Override
     public String toString() {
         String result = "Task{" +

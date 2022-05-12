@@ -1,5 +1,6 @@
 package managers;
 
+import Exeptions.ManagerSaveException;
 import tasks.*;
 import util.Managers;
 
@@ -17,17 +18,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         super(historyManager);
     }
 
-    public FileBackedTasksManager(HashMap<Integer, Task> tasks, HashMap<Integer, Epic> epics, HashMap<Integer,
-    Subtask> subtasks, int IDNumber, HistoryManager history) {
-        super(history);
-        this.tasks = tasks;
-        this.epics = epics;
-        this.subtasks = subtasks;
-        this.IDNumber = IDNumber;
-    }
     //<<<Тест функционала пятого спринта>>>//
     public static void main(String[] args) throws IOException {
-        FileBackedTasksManager taskManager = Managers.getDefault();
+        FileBackedTasksManager taskManager = (FileBackedTasksManager) Managers.getDefault();
         Task study = new Task("Учёба", "Описание");
         taskManager.createTask(study);
 
@@ -37,7 +30,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Epic relocation = new Epic("Переезд", "Описание");
         taskManager.createEpic(relocation);
 
-        Subtask getAVisa = new Subtask("Получить  визу", "Описание", relocation);
+        Subtask getAVisa = new Subtask("Получить визу", "Описание", relocation);
         taskManager.createSubtask(getAVisa);
 
         Subtask accumulateFunds = new Subtask("Накопить деньги", "Описание",  relocation);
@@ -71,26 +64,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             BufferedWriter bf = new BufferedWriter(fileWriter);
             bf.write("id,type,name,status,description,epic\n");
             for (Task t: tasks.values()) {
-                bf.write(tasksToString(t) + "\n");
+                bf.write(t.tasksToString() + "\n");
             }
             for (Epic e: epics.values()) {
-                bf.write(tasksToString(e) + "\n");
+                bf.write(e.tasksToString() + "\n");
             }
             for (Subtask s: subtasks.values()) {
-                bf.write(tasksToString(s) + "\n");
+                bf.write(s.tasksToString() + "\n");
             }
-            bf.write("\n"+historyManager.toString());
+            bf.write("\n" + historyManager.toString());
             bf.flush();
         } catch (IOException e) {
-            new ManagerSaveException();
+            throw new ManagerSaveException("File saving process error");
         }
     }
 
     static FileBackedTasksManager loadFromFile(File file) {
-        HashMap<Integer, Task> taskHashMap = new HashMap<>();
-        HashMap<Integer, Epic> epicHashMap = new HashMap<>();
-        HashMap<Integer, Subtask> subtaskHashMap = new HashMap<>();
-        HistoryManager history = Managers.getDefaultHistory();
+        FileBackedTasksManager newManager = new FileBackedTasksManager(new InMemoryHistoryManager());
         List<Integer> list = null;
         String line ;
         int maxID = 0;
@@ -101,35 +91,33 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 if (!line.isBlank()) {
                     if (tasksFromString(line).getClass().equals(Task.class)) {
                         Task t = tasksFromString(line);
-                        taskHashMap.put(t.getID(), t);
+                        newManager.tasks.put(t.getID(), t);
                     } else if (tasksFromString(line).getClass().equals(Epic.class)) {
                         Epic e = (Epic) tasksFromString(line);
-                        epicHashMap.put(e.getID(), e);
+                        newManager.epics.put(e.getID(), e);
                     } else if (tasksFromString(line).getClass().equals(Subtask.class)) {
                         Subtask s = (Subtask) tasksFromString(line);
-                        subtaskHashMap.put(tasksFromString(line).getID(), s);
+                        newManager.subtasks.put(tasksFromString(line).getID(), s);
                         if (s != null) {
-                            epicHashMap.get(s.getEpicID()).addSubtask(s);
+                            newManager.epics.get(s.getEpicID()).addSubtask(s);
                         }
                     }
                     if (tasksFromString(line).getID() > maxID) maxID = tasksFromString(line).getID();
                 } else {
                     line = br.readLine();
-                    list =  history.fromString(line);
+                    list =  newManager.historyManager.fromString(line);
                 }
             }
-            FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(taskHashMap, epicHashMap,
-            subtaskHashMap, maxID, history);
             if (list != null) {
                 for (Integer id : list) {
-                    fileBackedTasksManager.getTaskByID(id);
-                    fileBackedTasksManager.getEpicByID(id);
-                    fileBackedTasksManager.getSubtaskByID(id);
+                    newManager.getTaskByID(id);
+                    newManager.getEpicByID(id);
+                    newManager.getSubtaskByID(id);
                 }
             } else {
             }
-            fileBackedTasksManager.IDNumber = maxID+1;
-            return fileBackedTasksManager;
+            newManager.IDNumber = maxID+1;
+            return newManager;
         } catch(IOException e) {
             e.printStackTrace();
             return null;
@@ -256,23 +244,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    private static String tasksToString(Task task) {
-
-        String result = "";
-        String type = "SUBTASK";
-        if (task.getClass().equals(Task.class)) {
-            type = "TASK";
-        } else if (task.getClass().equals(Epic.class)) {
-            type ="EPIC";
-        }
-        result = result + task.getID() + "," + type + "," + task.getName() + "," + task.getStatus() + ","
-                + task.getDescription();
-        if (task.getClass().equals(Subtask.class)) {
-            result = result + "," + ((Subtask) task).getEpicID();
-        }
-        return result;
-    }
-
     private static Task tasksFromString(String value) {
         int index = 0;
         Scanner scanner = null;
@@ -327,8 +298,5 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 return s;
         }
         return null;
-    }
-    public class ManagerSaveException extends RuntimeException {
-
     }
 }

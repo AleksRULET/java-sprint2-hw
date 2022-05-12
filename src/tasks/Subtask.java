@@ -21,6 +21,12 @@ public class Subtask extends Task {
         this.epicID = epicID;
     }
 
+
+    public String tasksToString() {
+        return getID() + "," + getClass().getSimpleName().toUpperCase() + "," + getName() + "," + getStatus() + ","
+                + getDescription() + "," + getEpicID();
+    }
+
     @Override
     public String toString() {
         String result = "Subtask{" +
