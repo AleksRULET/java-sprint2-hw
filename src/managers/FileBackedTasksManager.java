@@ -110,9 +110,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
             if (list != null) {
                 for (Integer id : list) {
-                    newManager.getTaskByID(id);
-                    newManager.getEpicByID(id);
-                    newManager.getSubtaskByID(id);
+                    newManager.historyManager.add(newManager.tasks.get(id));
+                    newManager.historyManager.add(newManager.epics.get(id));
+                    newManager.historyManager.add(newManager.subtasks.get(id));
                 }
             } else {
             }

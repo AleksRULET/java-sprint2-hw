@@ -2,11 +2,9 @@ package util;
 
 import managers.*;
 
-import java.io.IOException;
-
 public class Managers {
 
-    public static TaskManager  getDefault() throws IOException {
+    public static TaskManager  getDefault() {
         return new FileBackedTasksManager(getDefaultHistory());
     }
 
