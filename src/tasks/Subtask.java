@@ -1,15 +1,17 @@
 package tasks;
 
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicID;
 
-    public Subtask(String name, String description, Epic epic) {
-        super(name, description);
+    public Subtask(String name, String description, int duration, LocalDateTime startTime, Epic epic) {
+        super(name, description, duration, startTime);
         this.epicID = epic.getID();
     }
 
-    public Subtask(int ID, String description, String name, Status status, int epicID) {
-        super(ID, description, name, status);
+    public Subtask(int ID, String description, String name,  Status status, int duration, LocalDateTime startTime, LocalDateTime endTime, int epicID) {
+        super(ID, description, name, status, duration, startTime, endTime);
         this.epicID = epicID;
     }
 
@@ -17,14 +19,9 @@ public class Subtask extends Task {
         return epicID;
     }
 
-    public void setEpicID(int epicID) {
-        this.epicID = epicID;
-    }
-
-
     public String tasksToString() {
         return getID() + "," + getClass().getSimpleName().toUpperCase() + "," + getName() + "," + getStatus() + ","
-                + getDescription() + "," + getEpicID();
+                + getDescription() + "," + getDuration()  + "," + getStartTime()  + "," + getEndTime() + "," + getEpicID();
     }
 
     @Override

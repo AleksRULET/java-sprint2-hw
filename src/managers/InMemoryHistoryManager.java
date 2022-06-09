@@ -55,13 +55,17 @@ public class InMemoryHistoryManager implements HistoryManager {
                 prev.setNext(next);
             } else {
                 head = next;
-                head.setPrev(null);
+                if (head!=null) {
+                    head.setPrev(null);
+                }
             }
             if (next != null) {
                 next.setPrev(prev);
             } else {
                 tail = prev;
-                tail.setNext(null);
+                if (tail != null) {
+                    tail.setNext(null);
+                }
             }
             places.remove(node);
         }

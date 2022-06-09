@@ -5,16 +5,16 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
-    Collection<Task> getAllTask();
+    List<Task> getAllTask();
 
-    Collection<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
-    Collection<Subtask> getAllSubtasks();
+    List<Subtask> getAllSubtasks();
 
     void deleteAllTask();
 
@@ -49,4 +49,10 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtasksOfEpic(int ID);
 
     List<Task> history();
+
+    HistoryManager getHistoryManager();
+
+    int getIDNumber();
+
+    TreeSet<Task> getPrioritizedTasks();
 }
