@@ -13,8 +13,8 @@ import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- abstract class TaskManagerTest {
-     TaskManager taskManager;
+ abstract class TaskManagerTest<T extends TaskManager> {
+     T taskManager;
      Task task;
      Epic epic;
      Subtask subtask;
@@ -281,25 +281,10 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(list.get(1), taskManager.history().get(1), "Задачи не равны");
         assertEquals(list.get(2), taskManager.history().get(2), "Задачи не равны");
 
-        taskManager.getSubtaskByID(2);
-        assertEquals(list.size(), taskManager.history().size(), "Дублирование работает некорректно");
-        assertEquals(list.get(2), taskManager.history().get(2), "Дублирование работает некорректно");
-
-        taskManager.getHistoryManager().remove(task.getID());
-        assertEquals(2, taskManager.history().size(), "Удаление из начала истории работает некорректно");
-        assertEquals(list.get(1), taskManager.history().get(0), "Удаление из начала истории работает некорректно");
-        assertEquals(list.get(2), taskManager.history().get(1), "Удаление из начала истории работает некорректно");
-        taskManager.getTaskByID(0);
-
-        taskManager.getHistoryManager().remove(subtask.getID());
-        assertEquals(2, taskManager.history().size(), "Удаление из середины истории работает некорректно");
-        assertEquals(list.get(1), taskManager.history().get(0), "Удаление из середины истории работает некорректно");
-        assertEquals(list.get(0), taskManager.history().get(1), "Удаление из середины истории работает некорректно");
-        taskManager.getSubtaskByID(2);
-
-        taskManager.getHistoryManager().remove(subtask.getID());
-        assertEquals(2, taskManager.history().size(), "Удаление из конца истории работает некорректно");
-        assertEquals(list.get(1), taskManager.history().get(0), "Удаление из конца истории работает некорректно");
-        assertEquals(list.get(0), taskManager.history().get(1), "Удаление из конца истории работает некорректно");
+        clear();
+        assertEquals(list.size(), taskManager.history().size(), "Размер списка истории неверен");
+        assertEquals(list.get(0), taskManager.history().get(0), "Задачи не равны");
+        assertEquals(list.get(1), taskManager.history().get(1), "Задачи не равны");
+        assertEquals(list.get(2), taskManager.history().get(2), "Задачи не равны");
     }
 }

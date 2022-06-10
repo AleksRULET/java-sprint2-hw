@@ -60,5 +60,17 @@ class EpicTest {
         assertEquals(LocalDateTime.of(2022, 1, 1, 00, 00), epic.getStartTime(), "Неверное время начала эпика");
         assertEquals(LocalDateTime.of(2022, 1, 2, 00, 10), epic.getEndTime(), "Неверное время конца эпика");
         assertEquals(1450, epic.getDuration(), "Неверная продолжительность эпика");
+
+        Subtask newSubtask = new Subtask("Подзадача1", "Описание", 10, LocalDateTime.of(2022, 1, 3, 00, 00), epic);
+        tasksManager.updateSubtask(2, newSubtask, "NEW");
+        assertEquals(LocalDateTime.of(2022, 1, 1, 00, 00), epic.getStartTime(), "Неверное время начала эпика");
+        assertEquals(LocalDateTime.of(2022, 1, 3, 00, 10), epic.getEndTime(), "Неверное время конца эпика");
+        assertEquals(2890, epic.getDuration(), "Неверная продолжительность эпика");
+
+        tasksManager.deleteSubtaskByID(1);
+        assertEquals(LocalDateTime.of(2022, 1, 3, 00, 00), epic.getStartTime(), "Неверное время начала эпика");
+        assertEquals(LocalDateTime.of(2022, 1, 3, 00, 10), epic.getEndTime(), "Неверное время конца эпика");
+        assertEquals(10, epic.getDuration(), "Неверная продолжительность эпика");
+
     }
 }

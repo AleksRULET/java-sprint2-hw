@@ -215,12 +215,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    @Override
-    public HistoryManager getHistoryManager() {
-        return historyManager;
-    }
-
-    boolean checkIntersections(Task checkTask) {
+    protected boolean checkIntersections(Task checkTask) {
         for (Task task: prioritizedTasks) {
             if (((checkTask.getStartTime() != null) && (checkTask.getEndTime() != null))
                 && ((task.getStartTime() != null) && (task.getEndTime() != null))) {
