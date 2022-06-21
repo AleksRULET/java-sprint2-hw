@@ -15,7 +15,7 @@ public class KVTaskClient {
 
     public KVTaskClient(String path) {
         this.url = URI.create(path);
-        httpClient = HttpClient.newBuilder().build();
+        httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
         request = HttpRequest.newBuilder().uri(URI.create(path + "/register/")).GET().build();
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -30,6 +30,7 @@ public class KVTaskClient {
     void put(String key, String json) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/save/" + key + "?API_TOKEN=" + API_TOKEN))
+                .version(HttpClient.Version.HTTP_1_1)
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
@@ -46,6 +47,7 @@ public class KVTaskClient {
     String load(String key) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url + "/load/" + key + "?API_TOKEN=" + API_TOKEN))
+                .version(HttpClient.Version.HTTP_1_1)
                 .GET()
                 .build();
 

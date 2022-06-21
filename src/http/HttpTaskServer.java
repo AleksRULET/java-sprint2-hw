@@ -1,7 +1,6 @@
 package http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import managers.HttpTaskManager;
@@ -12,6 +11,7 @@ import util.Managers;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -25,7 +25,7 @@ public class HttpTaskServer {
     public HttpTaskServer() throws IOException {
         taskManager = (HttpTaskManager) Managers.getDefault();
         gson = new GsonBuilder().serializeNulls()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
 
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
 
@@ -52,62 +52,25 @@ public class HttpTaskServer {
                     String text = readText(h);
                     if (!text.isEmpty()) {
                         Task task = gson.fromJson(text, Task.class);
-                        if (taskManager.getAllTask().contains(task.getID())) {
-                            taskManager.updateTask(task.getID(), task, task.getStatus().toString());
+                        if (path.contains("id")) {
+                            if (taskManager.getAllTask().contains(Integer.parseInt(path.split("=")[2]))) {
+                                JsonElement element = JsonParser.parseString(h.getRequestBody().readAllBytes().toString());
+                                JsonArray jsonArray = element.getAsJsonArray();
+                                JsonElement element2 = JsonParser.parseString(jsonArray.get(0).toString());
+                                JsonArray jsonArray2 = element2.getAsJsonArray();
+                                taskManager.updateTask(Integer.parseInt(path.split("=")[2]), gson.fromJson(jsonArray2.get(0), Task.class), jsonArray.get(1).toString());
+                            }
                         } else {
                             taskManager.createTask(task);
                         }
-                        h.sendResponseHeaders(200, 0);
+                        h.sendResponseHeaders(201, 0);
                         return;
                     }
                 case "DELETE":
                     if (path.contains("id")) {
-                       taskManager.deleteTaskByID(Integer.parseInt(path.split("=")[2]));
+                        taskManager.deleteTaskByID(Integer.parseInt(path.split("=")[2]));
                     } else {
                         taskManager.deleteAllTask();
-                    }
-                    h.sendResponseHeaders(200, 0);
-                    return;
-                default:
-                System.out.println("Неподдерживаемый метод: " + h.getRequestMethod());
-                h.sendResponseHeaders(405, 0);
-            }
-            } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            h.close();
-        }
-    }
-
-
-    public void  epic(HttpExchange h) {
-        try {
-            String path = h.getRequestURI().getPath();
-            switch (h.getRequestMethod()) {
-                case "GET":
-                    if (path.contains("id")) {
-                        sendText(h, gson.toJson(taskManager.getEpicByID(Integer.parseInt(path.split("=")[2]))));
-                    } else {
-                        sendText(h, gson.toJson(taskManager.getAllEpics()));
-                    }
-                    return;
-                case "POST":
-                    String text = readText(h);
-                    if (!text.isEmpty()) {
-                        Epic epic = gson.fromJson(text, Epic.class);
-                        if (taskManager.getAllEpics().contains(epic.getID())) {
-                            taskManager.updateEpic(epic.getID(), epic);
-                        } else {
-                            taskManager.createEpic(epic);
-                        }
-                        h.sendResponseHeaders(200, 0);
-                        return;
-                    }
-                case "DELETE":
-                    if (path.contains("id")) {
-                        taskManager.deleteEpicByID(Integer.parseInt(path.split("=")[2]));
-                    } else {
-                        taskManager.deleteAllEpic();
                     }
                     h.sendResponseHeaders(200, 0);
                     return;
@@ -122,7 +85,57 @@ public class HttpTaskServer {
         }
     }
 
-    public void  subtask(HttpExchange h) {
+
+    public void epic(HttpExchange h) {
+        try {
+            String path = h.getRequestURI().getPath();
+            switch (h.getRequestMethod()) {
+                case "GET":
+                    if (path.contains("id")) {
+                        sendText(h, gson.toJson(taskManager.getEpicByID(Integer.parseInt(path.split("=")[2]))));
+                    } else {
+                        sendText(h, gson.toJson(taskManager.getAllEpics()));
+                    }
+                    return;
+                case "POST":
+                    String text = readText(h);
+                    if (!text.isEmpty()) {
+                        Epic epic = gson.fromJson(text, Epic.class);
+                        if (h.getRequestURI().getPath().contains("id")) {
+                            if (taskManager.getAllEpics().contains(Integer.parseInt(path.split("=")[2]))) {
+                                JsonElement element = JsonParser.parseString(h.getRequestBody().readAllBytes().toString());
+                                JsonArray jsonArray = element.getAsJsonArray();
+                                JsonElement element2 = JsonParser.parseString(jsonArray.get(0).toString());
+                                JsonArray jsonArray2 = element2.getAsJsonArray();
+                                taskManager.updateEpic(Integer.parseInt(path.split("=")[2]), gson.fromJson(jsonArray2.get(0), Epic.class));
+                            }
+                        } else {
+                            taskManager.createEpic(epic);
+                        }
+                        h.sendResponseHeaders(201, 0);
+                        return;
+                    }
+                case "DELETE":
+                    if (path.contains("id")) {
+                        taskManager.deleteEpicByID(Integer.parseInt(path.split("=")[2]));
+                    } else {
+                        taskManager.deleteAllEpic();
+                        taskManager.deleteAllSubtask();
+                    }
+                    h.sendResponseHeaders(200, 0);
+                    return;
+                default:
+                    System.out.println("Неподдерживаемый метод: " + h.getRequestMethod());
+                    h.sendResponseHeaders(405, 0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            h.close();
+        }
+    }
+
+    public void subtask(HttpExchange h) {
         try {
             String path = h.getRequestURI().getPath();
             switch (h.getRequestMethod()) {
@@ -137,12 +150,16 @@ public class HttpTaskServer {
                     String text = readText(h);
                     if (!text.isEmpty()) {
                         Subtask subtask = gson.fromJson(text, Subtask.class);
-                        if (taskManager.getAllSubtasks().contains(subtask.getID())) {
-                            taskManager.updateSubtask(subtask.getID(), subtask, subtask.getStatus().toString());
+                        if (taskManager.getAllSubtasks().contains(Integer.parseInt(path.split("=")[2]))) {
+                            JsonElement element = JsonParser.parseString(h.getRequestBody().readAllBytes().toString());
+                            JsonArray jsonArray = element.getAsJsonArray();
+                            JsonElement element2 = JsonParser.parseString(jsonArray.get(0).toString());
+                            JsonArray jsonArray2 = element2.getAsJsonArray();
+                            taskManager.updateSubtask(Integer.parseInt(path.split("=")[2]), gson.fromJson(jsonArray2.get(0), Subtask.class), jsonArray.get(1).toString());
                         } else {
                             taskManager.createSubtask(subtask);
                         }
-                        h.sendResponseHeaders(200, 0);
+                        h.sendResponseHeaders(201, 999);
                         return;
                     }
                 case "DELETE":
