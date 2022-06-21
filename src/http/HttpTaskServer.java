@@ -19,8 +19,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class HttpTaskServer {
     public static final int PORT = 8080;
     private final HttpServer server;
-    HttpTaskManager taskManager;
-    Gson gson;
+    private HttpTaskManager taskManager;
+    private Gson gson;
 
     public HttpTaskServer() throws IOException {
         taskManager = (HttpTaskManager) Managers.getDefault();

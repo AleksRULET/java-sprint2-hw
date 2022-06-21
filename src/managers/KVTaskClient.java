@@ -8,10 +8,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    URI url;
+    private URI url;
     private String API_TOKEN;
     private final HttpClient httpClient;
-    HttpRequest request;
+    private HttpRequest request;
 
     public KVTaskClient(String path) {
         this.url = URI.create(path);
