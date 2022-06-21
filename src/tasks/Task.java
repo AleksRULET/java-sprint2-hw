@@ -118,7 +118,7 @@ public class Task {
             result = result + ", description=null";
         }
 
-        return result + ", status=" + status + '}';
+        return result + ", status=" + status + ", startTime=" + startTime + ", endTime=" + endTime+ ", duration=" + duration + '}';
     }
 }
 

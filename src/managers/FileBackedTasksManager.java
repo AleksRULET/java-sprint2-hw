@@ -18,11 +18,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         IDNumber = 0;
     }
 
-
-    public static void main(String[] args) {
-    }
-
-
     public void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
             BufferedWriter bf = new BufferedWriter(fileWriter);
